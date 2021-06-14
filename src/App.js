@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import data from './data';
 
-function App() {
+const App = () => {
+  const [currentCategory, setCurrentCategory] = useState([]);
+  const categories = data.map((item) => item.category);
+  const uniqueCategories = [...new Set(categories)];
+
+  const getItem = (category) => {
+    const selectedCategory = data.filter((item) => item.category === category);
+    setCurrentCategory(selectedCategory);
+    return;
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={() => setCurrentCategory(data)}>all</button>
+      {uniqueCategories.map((category) => {
+        return <button onClick={() => getItem(category)}>{category}</button>;
+      })}
+      {currentCategory.map((item) => {
+        const { id, title, price, img, desc } = item;
+        return (
+          <div key={id}>
+            <img src={img} alt={title} />
+            <h4>{price}</h4>
+            <p>{desc}</p>
+          </div>
+        );
+      })}
     </div>
   );
-}
+};
 
 export default App;
